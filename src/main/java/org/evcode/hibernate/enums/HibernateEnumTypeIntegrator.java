@@ -14,8 +14,7 @@ import java.util.Iterator;
 public class HibernateEnumTypeIntegrator implements Integrator {
 
     @Override
-    public void integrate(Metadata metadata,
-                          SessionFactoryImplementor sessionFactoryImplementor,
+    public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactoryImplementor,
                           SessionFactoryServiceRegistry sessionFactoryServiceRegistry) {
 
         final MetadataImplementor mi;
@@ -38,6 +37,8 @@ public class HibernateEnumTypeIntegrator implements Integrator {
     }
 
     @Override
-    public void disintegrate(SessionFactoryImplementor sessionFactoryImplementor, SessionFactoryServiceRegistry sessionFactoryServiceRegistry) {
+    public void disintegrate(SessionFactoryImplementor sessionFactoryImplementor,
+                             SessionFactoryServiceRegistry sessionFactoryServiceRegistry) {
+        //There is nothing to do here!
     }
 }

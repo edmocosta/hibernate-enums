@@ -7,11 +7,9 @@ import org.hibernate.usertype.DynamicParameterizedType;
 import java.util.Properties;
 
 public class EnumTypeWrapper extends SimpleValue implements KeyValue {
-    private final PersistentClass entity;
 
     public EnumTypeWrapper(MetadataImplementor metadata, PersistentClass entity, Property property) {
         super(metadata);
-        this.entity = entity;
 
         Properties properties = new Properties();
         properties.setProperty(DynamicParameterizedType.IS_DYNAMIC, "true");
@@ -19,7 +17,10 @@ public class EnumTypeWrapper extends SimpleValue implements KeyValue {
 
         super.setTypeName(EnumTypeUserType.class.getName());
         super.setTypeParameters(properties);
-        super.addColumn(new Column(property.getName()));
+
+        Column column = new Column(property.getName());
+        super.addColumn(column);
+
         super.setTable(entity.getTable());
     }
 }
