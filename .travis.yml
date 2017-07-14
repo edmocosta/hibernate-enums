@@ -12,7 +12,7 @@ deploy:
     script: chmod +x .travis/deploy.sh && .travis/deploy.sh
     skip_cleanup: true
     on:
-      repo: edmocosta/hibernate-enum
+      repo: edmocosta/hibernate-enums
       branch: master
       jdk: oraclejdk8
   -
@@ -20,6 +20,6 @@ deploy:
     script: chmod +x .travis/deploy.sh && .travis/deploy.sh
     skip_cleanup: true
     on:
-      repo: edmocosta/hibernate-enum
+      repo: edmocosta/hibernate-enums
       tags: true
       jdk: oraclejdk8
