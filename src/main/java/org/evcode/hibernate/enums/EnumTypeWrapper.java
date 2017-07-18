@@ -8,19 +8,48 @@ import java.util.Properties;
 
 public class EnumTypeWrapper extends SimpleValue implements KeyValue {
 
-    public EnumTypeWrapper(MetadataImplementor metadata, PersistentClass entity, Property property) {
+
+    public EnumTypeWrapper(MetadataImplementor metadata, Properties properties) {
+
+        super(metadata);
+        super.setTypeName(EnumTypeUserType.class.getName());
+        super.setTypeParameters(properties);
+
+        String propertyName = properties.getProperty("org.hibernate.type.ParameterType.propertyName");
+        if (propertyName != null) {
+            Column column = new Column(propertyName);
+            super.addColumn(column);
+        }
+    }
+
+    public EnumTypeWrapper(MetadataImplementor metadata,
+                           Table table,
+                           String propertyName,
+                           String propertyReturnedClassName) {
         super(metadata);
 
         Properties properties = new Properties();
         properties.setProperty(DynamicParameterizedType.IS_DYNAMIC, "true");
-        properties.setProperty(DynamicParameterizedType.RETURNED_CLASS, property.getType().getReturnedClass().getName());
+
+        if (propertyReturnedClassName != null) {
+            properties.setProperty(DynamicParameterizedType.RETURNED_CLASS, propertyReturnedClassName);
+        }
 
         super.setTypeName(EnumTypeUserType.class.getName());
         super.setTypeParameters(properties);
 
-        Column column = new Column(property.getName());
-        super.addColumn(column);
+        if (propertyName != null) {
+            Column column = new Column(propertyName);
+            super.addColumn(column);
+        }
 
-        super.setTable(entity.getTable());
+        if (table != null) {
+            super.setTable(table);
+        }
+    }
+
+
+    public EnumTypeWrapper(MetadataImplementor metadata, PersistentClass persistentClass, Property property) {
+        this(metadata, persistentClass.getTable(), property.getName(), property.getType().getReturnedClass().getName());
     }
 }

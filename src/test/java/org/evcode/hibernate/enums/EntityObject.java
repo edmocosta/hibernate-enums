@@ -1,9 +1,7 @@
 package org.evcode.hibernate.enums;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.sql.Types;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -11,54 +9,46 @@ import java.util.UUID;
 public class EntityObject {
 
     @Id
-    private Long id = Instant.now().toEpochMilli();
+    Long id = Instant.now().toEpochMilli();
 
     @Column
-    @Transient
-    private String name = UUID.randomUUID().toString();
+    String name = UUID.randomUUID().toString();
 
     @Column(columnDefinition = "INT")
-    private IntegerEnum integerEnum = IntegerEnum.ONE;
+    IntegerEnum integerEnum = IntegerEnum.ONE;
 
     @Column(columnDefinition = "VARCHAR")
-    private StringEnum stringEnum = StringEnum.OPTION_A;
+    StringEnum stringEnum = StringEnum.OPTION_A;
 
-    public String getName() {
-        return name;
-    }
+    @Column(columnDefinition = "DOUBLE")
+    DoubleEnum doubleEnum = DoubleEnum.ONE;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Embedded
+    EmbeddedProperty embeddedProperty = new EmbeddedProperty();
 
-    public IntegerEnum getIntegerEnum() {
-        return integerEnum;
-    }
 
-    public void setIntegerEnum(IntegerEnum integerEnum) {
-        this.integerEnum = integerEnum;
-    }
+    public enum DoubleEnum implements EnumType<Double> {
+        ONE(12.58), TWO(22.15);
 
-    public Long getId() {
-        return id;
-    }
+        private final Double value;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        DoubleEnum(Double value) {
+            this.value = value;
+        }
 
-    public StringEnum getStringEnum() {
-        return stringEnum;
-    }
+        @Override
+        public Double toValue() {
+            return value;
+        }
 
-    public void setStringEnum(StringEnum stringEnum) {
-        this.stringEnum = stringEnum;
+        @Override
+        public int getSqlType() {
+            return Types.DOUBLE;
+        }
     }
 
     public enum IntegerEnum implements IntegerEnumType {
-
-        ONE(1),
-        TWO(2);
+        ONE(1), TWO(2);
 
         private final int value;
 
@@ -73,9 +63,7 @@ public class EntityObject {
     }
 
     public enum StringEnum implements StringEnumType {
-
-        OPTION_A("A"),
-        OPTION_B("B");
+        OPTION_A("A"), OPTION_B("B");
 
         private final String value;
 
@@ -86,6 +74,28 @@ public class EntityObject {
         @Override
         public String toValue() {
             return value;
+        }
+    }
+
+    @Embeddable
+    public static class EmbeddedProperty {
+
+        @Column(columnDefinition = "INTEGER")
+        EmbeddedIntegerEnum embeddedInt;
+
+        public enum EmbeddedIntegerEnum implements IntegerEnumType {
+            THREE(1), FOUR(2);
+
+            private final int value;
+
+            EmbeddedIntegerEnum(int value) {
+                this.value = value;
+            }
+
+            @Override
+            public Integer toValue() {
+                return value;
+            }
         }
     }
 }

@@ -11,5 +11,6 @@
         <property name="show_sql">true</property>
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
         <mapping class="org.evcode.hibernate.enums.EntityObject"/>
+        <mapping class="org.evcode.hibernate.enums.RelatedObject"/>
     </session-factory>
 </hibernate-configuration>
